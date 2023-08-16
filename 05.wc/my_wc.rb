@@ -5,8 +5,8 @@ require 'optparse'
 
 def run_wc
   has_options = options
-  size_info = group_size_info
-  output_with_options(size_info, has_options)
+  size_informations = group_size_informations
+  output_with_options(size_informations, has_options)
 end
 
 def options
@@ -19,7 +19,7 @@ def options
   params
 end
 
-def group_size_info
+def group_size_informations
   if ARGV.empty?
     textdata = $stdin.read
     Array[count_textdata(textdata)]
