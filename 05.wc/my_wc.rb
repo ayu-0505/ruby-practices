@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+PADDING = 8
 
 def run_wc
   output_with_options(options, lists_of_counts)
@@ -43,7 +44,16 @@ def output_with_options(options, lists_of_counts)
       list_of_counts.delete(:word_count) if !options[:w]
       list_of_counts.delete(:byte_count) if !options[:c]
     end
-    list_of_counts.each_value { |size| print size.to_s.rjust(8) }
+    list_of_counts.each_value do |count_data| 
+      if count_data.instance_of?(Integer)
+        if count_data.to_s.size >= PADDING
+        print count_data.to_s.rjust(count_data.to_s.size + 1)
+        else
+        print count_data.to_s.rjust(PADDING)
+        end
+      end
+      print " #{count_data}" if count_data.instance_of?(String)
+    end
     puts "\n"
   end
 end
