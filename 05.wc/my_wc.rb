@@ -4,9 +4,7 @@
 require 'optparse'
 
 def run_wc
-  has_options = options
-  size_informations = group_size_informations
-  output_with_options(size_informations, has_options)
+  output_with_options(options, lists_of_counts)
 end
 
 def options
@@ -19,42 +17,42 @@ def options
   params
 end
 
-def group_size_informations
+def lists_of_counts
   if ARGV.empty?
-    textdata = $stdin.read
-    Array[count_textdata(textdata)]
+    standard_input = $stdin.read
+    Array[count_text(standard_input)]
   else
     ARGV.map do |file|
-      hash = count_textdata(File.read(file))
-      hash[:text_name] = " #{file}"
+      hash = count_text(File.read(file))
+      hash[:text_name] = "#{file}"
       hash
     end
   end
 end
 
-def count_textdata(textdata)
-  { lines: textdata.lines.size, number_of_words: textdata.split(' ').size, bytes: textdata.bytesize, text_name: nil }
+def count_text(text)
+  { line_count: text.lines.size, word_count: text.split(' ').size, byte_count: text.bytesize, text_name: nil }
 end
 
-def output_with_options(size_info, has_options)
-  output_info = size_info
-  output_info << total(output_info) if output_info.size >= 2
-  output_info.each do |information|
-    unless has_options.empty?
-      information.delete(:lines) if !has_options[:l]
-      information.delete(:number_of_words) if !has_options[:w]
-      information.delete(:bytes) if !has_options[:c]
+def output_with_options(options, lists_of_counts)
+  lists_of_counts_for_output = lists_of_counts
+  lists_of_counts_for_output << total(lists_of_counts_for_output) if lists_of_counts_for_output.size >= 2
+  lists_of_counts_for_output.each do |list_of_counts|
+    unless options.empty?
+      list_of_counts.delete(:line_count) if !options[:l]
+      list_of_counts.delete(:word_count) if !options[:w]
+      list_of_counts.delete(:byte_count) if !options[:c]
     end
-    information.each_value { |size| print size.to_s.rjust(8) }
+    list_of_counts.each_value { |size| print size.to_s.rjust(8) }
     puts "\n"
   end
 end
 
-def total(files)
-  total_lines = files.inject(0) { |sum, hash| sum + hash[:lines] }
-  total_number_of_words = files.inject(0) { |sum, hash| sum + hash[:number_of_words] }
-  total_bytes = files.inject(0) { |sum, hash| sum + hash[:bytes] }
-  { lines: total_lines, number_of_words: total_number_of_words, bytes: total_bytes, total: 'total  ' }
+def total(lists_of_counts)
+  total_counts_of_line = lists_of_counts.inject(0) { |sum, hash| sum + hash[:line_count] }
+  total_counts_of_word = lists_of_counts.inject(0) { |sum, hash| sum + hash[:word_count] }
+  total_counts_of_byte = lists_of_counts.inject(0) { |sum, hash| sum + hash[:byte_count] }
+  { line_count: total_counts_of_line, word_count: total_counts_of_word, byte_count: total_counts_of_byte, total: 'total  ' }
 end
 
 run_wc
