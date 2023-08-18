@@ -35,7 +35,7 @@ def count_text(text)
 end
 
 def output_with_options(options, lists_of_counts)
-  lists_of_counts_for_output = lists_of_counts
+  lists_of_counts_for_output = Marshal.load(Marshal.dump(lists_of_counts))
   lists_of_counts_for_output << total(lists_of_counts_for_output) if lists_of_counts_for_output.size >= 2
   lists_of_counts_for_output.each do |list_of_counts|
     unless options.empty?
