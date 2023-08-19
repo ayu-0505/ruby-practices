@@ -25,7 +25,7 @@ def lists_of_counts
   else
     ARGV.map do |file|
       hash = count_text(File.read(file))
-      hash[:text_name] = "#{file}"
+      hash[:text_name] = file.to_s
       hash
     end
   end
@@ -39,20 +39,13 @@ def output_with_options(options, lists_of_counts)
   lists_of_counts_for_output = Marshal.load(Marshal.dump(lists_of_counts))
   lists_of_counts_for_output << total(lists_of_counts_for_output) if lists_of_counts_for_output.size >= 2
   lists_of_counts_for_output.each do |list_of_counts|
-    unless options.empty?
-      list_of_counts.delete(:line_count) if !options[:l]
-      list_of_counts.delete(:word_count) if !options[:w]
-      list_of_counts.delete(:byte_count) if !options[:c]
-    end
-    list_of_counts.each_value do |count_data| 
+    list_of_counts.delete_option unless options.empty?
+    list_of_counts.each_value do |count_data|
       if count_data.instance_of?(Integer)
-        if count_data.to_s.size >= PADDING
-        print count_data.to_s.rjust(count_data.to_s.size + 1)
-        else
-        print count_data.to_s.rjust(PADDING)
-        end
+        print count_data.to_s.rjust(adjust_padding(count_data))
+      elsif count_data.instance_of?(String)
+        print " #{count_data}"
       end
-      print " #{count_data}" if count_data.instance_of?(String)
     end
     puts "\n"
   end
@@ -63,6 +56,20 @@ def total(lists_of_counts)
   total_counts_of_word = lists_of_counts.inject(0) { |sum, hash| sum + hash[:word_count] }
   total_counts_of_byte = lists_of_counts.inject(0) { |sum, hash| sum + hash[:byte_count] }
   { line_count: total_counts_of_line, word_count: total_counts_of_word, byte_count: total_counts_of_byte, total: 'total  ' }
+end
+
+def delete_option(options)
+  delete(:line_count) if !options[:l]
+  delete(:word_count) if !options[:w]
+  delete(:byte_count) if !options[:c]
+end
+
+def adjust_padding(count_data)
+  if count_data.to_s.size >= PADDING
+    count_data.to_s.size + 1
+  else
+    PADDING
+  end
 end
 
 run_wc
