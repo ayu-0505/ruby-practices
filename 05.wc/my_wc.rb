@@ -4,6 +4,11 @@
 require 'optparse'
 PADDING = 8
 
+def run_wc(options, lists_of_counts)
+  lists_of_counts.each { |list_of_counts| output_with_options(list_of_counts, options) }
+  output_with_options(total(lists_of_counts), options) if lists_of_counts.size >= 2
+end
+
 def options
   opt = OptionParser.new
   params = {}
@@ -31,11 +36,6 @@ def count_text(text)
   { line_count: text.lines.size, word_count: text.split(' ').size, byte_count: text.bytesize, text_name: nil }
 end
 
-def run_wc(options, lists_of_counts)
-  lists_of_counts.each { |list_of_counts| output_with_options(list_of_counts, options) }
-  output_with_options(total(lists_of_counts), options) if lists_of_counts.size >= 2
-end
-
 def total(lists_of_count_texts)
   total_counts_of_line = lists_of_count_texts.inject(0) { |sum, hash| sum + hash[:line_count] }
   total_counts_of_word = lists_of_count_texts.inject(0) { |sum, hash| sum + hash[:word_count] }
@@ -55,12 +55,6 @@ def output_with_options(list_of_counts, options)
   end
   print " #{list_of_counts[:text_name]}"
   puts "\n"
-end
-
-def delete_option(list_of_counts, options)
-  list_of_counts.delete(:line_count) if !options[:l]
-  list_of_counts.delete(:word_count) if !options[:w]
-  list_of_counts.delete(:byte_count) if !options[:c]
 end
 
 def adjust_padding(count)
