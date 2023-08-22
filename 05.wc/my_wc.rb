@@ -4,10 +4,6 @@
 require 'optparse'
 PADDING = 8
 
-def run_wc
-  output_with_options(options, lists_of_counts)
-end
-
 def options
   opt = OptionParser.new
   params = {}
@@ -35,20 +31,9 @@ def count_text(text)
   { line_count: text.lines.size, word_count: text.split(' ').size, byte_count: text.bytesize, text_name: nil }
 end
 
-def output_with_options(options, lists_of_counts)
-  lists_of_counts_for_output = Marshal.load(Marshal.dump(lists_of_counts))
-  lists_of_counts_for_output << total(lists_of_counts_for_output) if lists_of_counts_for_output.size >= 2
-  lists_of_counts_for_output.each do |list_of_counts|
-    delete_option(list_of_counts, options) unless options.empty?
-    list_of_counts.each_value do |count_data|
-      if count_data.instance_of?(Integer)
-        print count_data.to_s.rjust(adjust_padding(count_data))
-      elsif count_data.instance_of?(String)
-        print " #{count_data}"
-      end
-    end
-    puts "\n"
-  end
+def run_wc(options, lists_of_counts)
+  lists_of_counts.each { |list_of_counts| output_with_options(list_of_counts, options) }
+  output_with_options(total(lists_of_counts), options) if lists_of_counts.size >= 2
 end
 
 def total(lists_of_count_texts)
@@ -58,18 +43,32 @@ def total(lists_of_count_texts)
   { line_count: total_counts_of_line, word_count: total_counts_of_word, byte_count: total_counts_of_byte, text_name: 'total' }
 end
 
+def output_with_options(list_of_counts, options)
+  if options.empty?
+    print list_of_counts[:line_count].to_s.rjust(adjust_padding(list_of_counts[:line_count]))
+    print list_of_counts[:word_count].to_s.rjust(adjust_padding(list_of_counts[:word_count]))
+    print list_of_counts[:byte_count].to_s.rjust(adjust_padding(list_of_counts[:byte_count]))
+  else
+    print list_of_counts[:line_count].to_s.rjust(adjust_padding(list_of_counts[:line_count])) if options[:l]
+    print list_of_counts[:word_count].to_s.rjust(adjust_padding(list_of_counts[:word_count])) if options[:w]
+    print list_of_counts[:byte_count].to_s.rjust(adjust_padding(list_of_counts[:byte_count])) if options[:c]
+  end
+  print " #{list_of_counts[:text_name]}"
+  puts "\n"
+end
+
 def delete_option(list_of_counts, options)
   list_of_counts.delete(:line_count) if !options[:l]
   list_of_counts.delete(:word_count) if !options[:w]
   list_of_counts.delete(:byte_count) if !options[:c]
 end
 
-def adjust_padding(count_data)
-  if count_data.to_s.size >= PADDING
-    count_data.to_s.size + 1
+def adjust_padding(count)
+  if count.to_s.size >= PADDING
+    count.to_s.size + 1
   else
     PADDING
   end
 end
 
-run_wc
+run_wc(options, lists_of_counts)
