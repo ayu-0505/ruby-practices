@@ -55,7 +55,7 @@ def total(lists_of_count_texts)
   total_counts_of_line = lists_of_count_texts.inject(0) { |sum, hash| sum + hash[:line_count] }
   total_counts_of_word = lists_of_count_texts.inject(0) { |sum, hash| sum + hash[:word_count] }
   total_counts_of_byte = lists_of_count_texts.inject(0) { |sum, hash| sum + hash[:byte_count] }
-  { line_count: total_counts_of_line, word_count: total_counts_of_word, byte_count: total_counts_of_byte, total: 'total' }
+  { line_count: total_counts_of_line, word_count: total_counts_of_word, byte_count: total_counts_of_byte, text_name: 'total' }
 end
 
 def delete_option(list_of_counts, options)
