@@ -6,7 +6,7 @@ PADDING = 8
 
 def run_wc(options, lists_of_counts)
   lists_of_counts.each { |list_of_counts| output_with_options(list_of_counts, options) }
-  output_with_options(total(lists_of_counts), options) if lists_of_counts.size >= 2
+  output_with_options(total_of_count_texts(lists_of_counts), options) if lists_of_counts.size >= 2
 end
 
 def options
@@ -36,6 +36,13 @@ def count_text(text)
   { line_count: text.lines.size, word_count: text.split(' ').size, byte_count: text.bytesize, text_name: nil }
 end
 
+def total_of_count_texts(lists_of_counts)
+  total_counts_of_line = lists_of_counts.inject(0) { |sum, hash| sum + hash[:line_count] }
+  total_counts_of_word = lists_of_counts.inject(0) { |sum, hash| sum + hash[:word_count] }
+  total_counts_of_byte = lists_of_counts.inject(0) { |sum, hash| sum + hash[:byte_count] }
+  { line_count: total_counts_of_line, word_count: total_counts_of_word, byte_count: total_counts_of_byte, text_name: 'total' }
+end
+
 def output_with_options(list_of_counts, options)
   if options.empty?
     print list_of_counts[:line_count].to_s.rjust(adjust_padding(list_of_counts[:line_count]))
@@ -48,13 +55,6 @@ def output_with_options(list_of_counts, options)
   end
   print " #{list_of_counts[:text_name]}"
   puts "\n"
-end
-
-def total(lists_of_counts)
-  total_counts_of_line = lists_of_counts.inject(0) { |sum, hash| sum + hash[:line_count] }
-  total_counts_of_word = lists_of_counts.inject(0) { |sum, hash| sum + hash[:word_count] }
-  total_counts_of_byte = lists_of_counts.inject(0) { |sum, hash| sum + hash[:byte_count] }
-  { line_count: total_counts_of_line, word_count: total_counts_of_word, byte_count: total_counts_of_byte, text_name: 'total' }
 end
 
 def adjust_padding(count)
