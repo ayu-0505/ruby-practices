@@ -44,15 +44,9 @@ def total_of_count_texts(lists_of_counts)
 end
 
 def output_with_options(list_of_counts, options)
-  if options.empty?
-    print list_of_counts[:line_count].to_s.rjust(adjust_padding(list_of_counts[:line_count]))
-    print list_of_counts[:word_count].to_s.rjust(adjust_padding(list_of_counts[:word_count]))
-    print list_of_counts[:byte_count].to_s.rjust(adjust_padding(list_of_counts[:byte_count]))
-  else
-    print list_of_counts[:line_count].to_s.rjust(adjust_padding(list_of_counts[:line_count])) if options[:l]
-    print list_of_counts[:word_count].to_s.rjust(adjust_padding(list_of_counts[:word_count])) if options[:w]
-    print list_of_counts[:byte_count].to_s.rjust(adjust_padding(list_of_counts[:byte_count])) if options[:c]
-  end
+  print list_of_counts[:line_count].to_s.rjust(adjust_padding(list_of_counts[:line_count])) if options[:l] || options.empty?
+  print list_of_counts[:word_count].to_s.rjust(adjust_padding(list_of_counts[:word_count])) if options[:w] || options.empty?
+  print list_of_counts[:byte_count].to_s.rjust(adjust_padding(list_of_counts[:byte_count])) if options[:c] || options.empty?
   print " #{list_of_counts[:text_name]}"
   puts "\n"
 end
