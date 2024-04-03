@@ -15,7 +15,7 @@ class Frame
     [@first_shot, @second_shot, @third_shot].sum(&:score)
   end
 
-  def spare?
+  def strike?
     @first_shot.mark == 'X'
   end
 end

@@ -18,11 +18,11 @@ class FrameTest < Minitest::Test
     assert_equal 3, frame.score
   end
 
-  def test_spare?
-    spare_frame = Frame.new('X')
-    not_spare_frame = Frame.new('1', '2')
+  def test_strike?
+    strike_frame = Frame.new('X')
+    not_strike_frame = Frame.new('1', '2')
 
-    assert spare_frame.spare?
-    refute not_spare_frame.spare?
+    assert strike_frame.strike?
+    refute not_strike_frame.strike?
   end
 end
