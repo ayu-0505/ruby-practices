@@ -11,11 +11,15 @@ class Frame
     @third_shot = Shot.new(third_mark)
   end
 
-  def score
+  def score # Shotクラスのscoreと混ざるのでframe_scoreに変更するべき？
     [@first_shot, @second_shot, @third_shot].sum(&:score)
   end
 
   def strike?
     @first_shot.mark == 'X'
+  end
+
+  def spare?
+    @first_shot.mark != 'X' && @first_shot.score + @second_shot.score == 10
   end
 end
