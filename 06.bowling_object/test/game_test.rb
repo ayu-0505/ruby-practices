@@ -23,6 +23,7 @@ class GameTest < Minitest::Test
   end
 
   def test_strike_bonus
+    assert_equal (9 + 1) + (6 + 4), @nomal_game.strike_bonus
     assert_equal (10 + 10) * 9, @all_strike_game.strike_bonus
   end
 

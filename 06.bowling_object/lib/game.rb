@@ -4,8 +4,6 @@ require_relative 'frame'
 class Game
   attr_reader :frame1, :frame2, :frame3, :frame4, :frame5, :frame6, :frame7, :frame8, :frame9, :frame10
 
-  # ["6", "3", "9", "0", "0", "3", "8", "2", "7", "3", "X", "9", "1", "8", "0", "X", "6", "4", "5"]
-  # [["6", "3"], ["9", "0"], ["0", "3"], ["8", "2"], ["7", "3"], ["X"], ["9", "1"], ["8", "0"], ["X"], ["6", "4", "5"]]
   def initialize(result)
     @frame1 = Frame.new(result[0][0], result[0][1])
     @frame2 = Frame.new(result[1][0], result[1][1])
@@ -30,7 +28,6 @@ class Game
                @frame10]
   end
 
-  # 今は単に足し合わせたのみなのであとでstrike_bonus + spare_bonusを作ること
   def total
     @frames.sum(&:score) + strike_bonus + spare_bonus
   end
@@ -38,9 +35,7 @@ class Game
   def strike_bonus
     bonus_point = 0
     @frames.each_with_index do |frame, i|
-      # next if !frame.strike? || i > 8
-      next unless frame.strike?
-      next if i > 8
+      next if !frame.strike? || i > 8
 
       bonus_point += @frames[i + 1].first_shot.score
       bonus_point += if @frames[i + 1].strike? && i < 8
@@ -55,9 +50,7 @@ class Game
   def spare_bonus
     bonus_point = 0
     @frames.each_with_index do |frame, i|
-      # next if !frame.spare? || i > 8
-      next unless frame.spare?
-      next if i > 8
+      next if !frame.spare? || i > 8
 
       bonus_point += @frames[i + 1].first_shot.score
     end
