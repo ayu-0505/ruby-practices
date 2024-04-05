@@ -32,13 +32,15 @@ class Game
 
   # 今は単に足し合わせたのみなのであとでstrike_bonus + spare_bonusを作ること
   def total
-    @frames.sum(&:score) + strike_bonus # + spare_bonus
+    @frames.sum(&:score) + strike_bonus + spare_bonus
   end
 
   def strike_bonus
     bonus_point = 0
     @frames.each_with_index do |frame, i|
-      next if !frame.strike? || i > 8
+      # next if !frame.strike? || i > 8
+      next unless frame.strike?
+      next if i > 8
 
       bonus_point += @frames[i + 1].first_shot.score
       bonus_point += if @frames[i + 1].strike? && i < 8
@@ -46,6 +48,18 @@ class Game
                      else
                        @frames[i + 1].second_shot.score
                      end
+    end
+    bonus_point
+  end
+
+  def spare_bonus
+    bonus_point = 0
+    @frames.each_with_index do |frame, i|
+      # next if !frame.spare? || i > 8
+      next unless frame.spare?
+      next if i > 8
+
+      bonus_point += @frames[i + 1].first_shot.score
     end
     bonus_point
   end
