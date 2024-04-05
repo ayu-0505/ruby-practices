@@ -4,35 +4,36 @@ require 'minitest/autorun'
 require_relative '../lib/frame'
 
 class FrameTest < Minitest::Test
-  def test_frame
-    assert Frame.new('1', '2')
+  def setup
+    @nomal_frame = Frame.new('1', '2')
+    @strike_frame = Frame.new('X')
+    @spare_frame = Frame.new('1', '9')
+    @frame10_has_third_shot = Frame.new('X', 'X', 'X')
   end
 
-  def test_have_shot_class
-    frame = Frame.new('1', '2')
-    assert_kind_of Shot, frame.first_shot
+  def test_frame
+    assert @nomal_frame
+  end
+
+  def test_has_shot_class
+    assert_kind_of Shot, @nomal_frame.first_shot
   end
 
   def test_score
-    frame = Frame.new('1', '2')
-    assert_equal 3, frame.score
+    assert_equal 3, @nomal_frame.score
+    assert_equal 10, @strike_frame.score
+    assert_equal 30, @frame10_has_third_shot.score
   end
 
   def test_strike?
-    strike_frame = Frame.new('X')
-    not_strike_frame = Frame.new('1', '2')
-
-    assert strike_frame.strike?
-    refute not_strike_frame.strike?
+    assert @strike_frame.strike?
+    refute @nomal_frame.strike?
+    refute @spare_frame.strike?
   end
 
   def test_spare?
-    spare_frame = Frame.new('1', '9')
-    strike_frame = Frame.new('X')
-    not_spare_frame = Frame.new('1', '2')
-
-    assert spare_frame.spare?
-    refute strike_frame.spare?
-    refute not_spare_frame.spare?
+    assert @spare_frame.spare?
+    refute @nomal_frame.spare?
+    refute @strike_frame.spare?
   end
 end
