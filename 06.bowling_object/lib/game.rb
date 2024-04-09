@@ -5,27 +5,16 @@ class Game
   attr_reader :frame1, :frame2, :frame3, :frame4, :frame5, :frame6, :frame7, :frame8, :frame9, :frame10
 
   def initialize(result)
-    @frame1 = Frame.new(result[0][0], result[0][1])
-    @frame2 = Frame.new(result[1][0], result[1][1])
-    @frame3 = Frame.new(result[2][0], result[2][1])
-    @frame4 = Frame.new(result[3][0], result[3][1])
-    @frame5 = Frame.new(result[4][0], result[4][1])
-    @frame6 = Frame.new(result[5][0], result[5][1])
-    @frame7 = Frame.new(result[6][0], result[6][1])
-    @frame8 = Frame.new(result[7][0], result[7][1])
-    @frame9 = Frame.new(result[8][0], result[8][1])
-    @frame10 = Frame.new(result[9][0], result[9][1], result[9][2])
-
-    @frames = [@frame1,
-               @frame2,
-               @frame3,
-               @frame4,
-               @frame5,
-               @frame6,
-               @frame7,
-               @frame8,
-               @frame9,
-               @frame10]
+    @frames = [@frame1 = Frame.new(result[0][0], result[0][1]),
+               @frame2 = Frame.new(result[1][0], result[1][1]),
+               @frame3 = Frame.new(result[2][0], result[2][1]),
+               @frame4 = Frame.new(result[3][0], result[3][1]),
+               @frame5 = Frame.new(result[4][0], result[4][1]),
+               @frame6 = Frame.new(result[5][0], result[5][1]),
+               @frame7 = Frame.new(result[6][0], result[6][1]),
+               @frame8 = Frame.new(result[7][0], result[7][1]),
+               @frame9 = Frame.new(result[8][0], result[8][1]),
+               @frame10 = Frame.new(result[9][0], result[9][1], result[9][2])]
   end
 
   def total
