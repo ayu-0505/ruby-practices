@@ -11,7 +11,7 @@ class Frame
     @third_shot = Shot.new(third_mark)
   end
 
-  def score # Shotクラスのscoreと混ざるのでframe_scoreに変更するべき？
+  def score
     [@first_shot, @second_shot, @third_shot].sum(&:score)
   end
 

@@ -3,30 +3,30 @@
 
 require_relative 'lib/game'
 
-raw_scores = ARGV[0].split(',')
-result = []
+input_scores = ARGV[0].split(',')
+devided_scores = []
 temp = []
-frame_num = 1
+frame_count = 1
 
-raw_scores.each do |score|
-  if frame_num == 10
+input_scores.each do |score|
+  if frame_count == 10
     temp << score
     next
   end
   if score == 'X'
-    result << [score]
+    devided_scores << [score]
     temp = []
-    frame_num += 1
+    frame_count += 1
   else
     temp << score
     if temp.size == 2
-      result << temp
+      devided_scores << temp
       temp = []
-      frame_num += 1
+      frame_count += 1
     end
   end
 end
-result << temp # frame_numが10の場合のtempを最後に挿入
+devided_scores << temp # frame_countが10の場合のtempを最後に挿入
 
-game = Game.new(result)
+game = Game.new(devided_scores)
 puts game.total
