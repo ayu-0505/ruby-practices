@@ -3,6 +3,5 @@
 
 require_relative 'lib/game'
 
-input_scores = ARGV[0].split(',')
-game = Game.new(input_scores)
+game = Game.new(ARGV[0].split(','))
 puts game.total

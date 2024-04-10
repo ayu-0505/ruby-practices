@@ -2,8 +2,8 @@
 
 require_relative 'frame'
 class Game
-  def initialize(raw_data)
-    scores = devide_scores(raw_data)
+  def initialize(standard_input_scores)
+    scores = devide_scores_for_frames(standard_input_scores)
     @frames = [@frame1 = Frame.new(scores[0][0], scores[0][1]),
                @frame2 = Frame.new(scores[1][0], scores[1][1]),
                @frame3 = Frame.new(scores[2][0], scores[2][1]),
@@ -45,11 +45,11 @@ class Game
     bonus_point
   end
 
-  def devide_scores(input_scores)
+  def devide_scores_for_frames(scores)
     devided_scores = []
     temp = []
     frame_count = 1
-    input_scores.each do |score|
+    scores.each do |score|
       temp << score
       next if frame_count == 10
       next if temp.size != 2 && score != 'X'
