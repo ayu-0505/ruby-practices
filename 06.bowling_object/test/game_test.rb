@@ -13,10 +13,6 @@ class GameTest < Minitest::Test
     assert @nomal_game
   end
 
-  def test_has_frames
-    assert_kind_of Frame, @nomal_game.frame1
-  end
-
   def test_total
     assert_equal 139, @nomal_game.total
     assert_equal 300, @all_strike_game.total

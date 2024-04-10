@@ -2,8 +2,6 @@
 
 require_relative 'frame'
 class Game
-  attr_reader :frame1, :frame2, :frame3, :frame4, :frame5, :frame6, :frame7, :frame8, :frame9, :frame10
-
   def initialize(raw_data)
     scores = devide_scores(raw_data)
     @frames = [@frame1 = Frame.new(scores[0][0], scores[0][1]),
