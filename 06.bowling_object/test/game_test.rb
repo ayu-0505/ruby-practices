@@ -5,8 +5,8 @@ require_relative '../lib/game'
 
 class GameTest < Minitest::Test
   def setup
-    @nomal_game = Game.new([%w[6 3], %w[9 0], %w[0 3], %w[8 2], %w[7 3], ['X'], %w[9 1], %w[8 0], ['X'], %w[6 4 5]])
-    @all_strike_game = Game.new([['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], %w[X X X]])
+    @nomal_game = Game.new(%w[6 3 9 0 0 3 8 2 7 3 X 9 1 8 0 X 6 4 5])
+    @all_strike_game = Game.new(%w[X X X X X X X X X X X X])
   end
 
   def test_game
