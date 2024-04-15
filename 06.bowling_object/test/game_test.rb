@@ -17,13 +17,4 @@ class GameTest < Minitest::Test
     assert_equal 139, @nomal_game.total
     assert_equal 300, @all_strike_game.total
   end
-
-  def test_strike_bonus
-    assert_equal (9 + 1) + (6 + 4), @nomal_game.strike_bonus
-    assert_equal (10 + 10) * 9, @all_strike_game.strike_bonus
-  end
-
-  def test_spare_bonus
-    assert_equal 7 + 10 + 8, @nomal_game.spare_bonus
-  end
 end

@@ -20,6 +20,8 @@ class Game
     @frames.sum(&:score) + strike_bonus + spare_bonus
   end
 
+  private
+
   def strike_bonus
     bonus_point = 0
     @frames.each_with_index do |frame, i|
