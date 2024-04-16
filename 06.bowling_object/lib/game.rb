@@ -3,7 +3,7 @@
 require_relative 'frame'
 class Game
   def initialize(standard_input_scores)
-    scores = devide_scores_for_frames(standard_input_scores)
+    scores = divide_scores_for_frames(standard_input_scores)
     @frames = [Frame.new(scores[0][0], scores[0][1]),
                Frame.new(scores[1][0], scores[1][1]),
                Frame.new(scores[2][0], scores[2][1]),
@@ -47,8 +47,8 @@ class Game
     bonus_point
   end
 
-  def devide_scores_for_frames(scores)
-    devided_scores = []
+  def divide_scores_for_frames(scores)
+    divided_scores = []
     temp = []
     frame_count = 1
     scores.each do |score|
@@ -56,10 +56,10 @@ class Game
       next if frame_count == 10
       next if temp.size != 2 && score != 'X'
 
-      devided_scores << temp
+      divided_scores << temp
       temp = []
       frame_count += 1
     end
-    devided_scores << temp # frame_countが10の場合のtempを最後に挿入
+    divided_scores << temp # frame_countが10の場合のtempを最後に挿入
   end
 end
