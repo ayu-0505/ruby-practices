@@ -47,15 +47,13 @@ class Game
   def divide_scores_for_frames(scores)
     divided_scores = []
     temp = []
-    frame_count = 1
     scores.each do |score|
       temp << score
-      next if frame_count == 10
+      next if divided_scores.size == 9
       next if temp.size != 2 && score != 'X'
 
       divided_scores << temp
       temp = []
-      frame_count += 1
     end
     divided_scores << temp # frame_countが10の場合のtempを最後に挿入
   end
