@@ -4,16 +4,13 @@ require_relative 'frame'
 class Game
   def initialize(standard_input_scores)
     scores = divide_scores_for_frames(standard_input_scores)
-    @frames = [Frame.new(scores[0][0], scores[0][1]),
-               Frame.new(scores[1][0], scores[1][1]),
-               Frame.new(scores[2][0], scores[2][1]),
-               Frame.new(scores[3][0], scores[3][1]),
-               Frame.new(scores[4][0], scores[4][1]),
-               Frame.new(scores[5][0], scores[5][1]),
-               Frame.new(scores[6][0], scores[6][1]),
-               Frame.new(scores[7][0], scores[7][1]),
-               Frame.new(scores[8][0], scores[8][1]),
-               Frame.new(scores[9][0], scores[9][1], scores[9][2])]
+    @frames = Array.new(10) do |i|
+      if i == 9
+        Frame.new(scores[i][0], scores[i][1], scores[i][2])
+      else
+        Frame.new(scores[i][0], scores[i][1])
+      end
+    end
   end
 
   def total
