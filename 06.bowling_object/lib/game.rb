@@ -2,8 +2,8 @@
 
 require_relative 'frame'
 class Game
-  def initialize(standard_input_scores)
-    scores = divide_scores_for_frames(standard_input_scores)
+  def initialize(score_characters)
+    scores = divide_scores_for_frames(score_characters)
     @frames = Array.new(10) do |i|
       if i == 9
         Frame.new(scores[i][0], scores[i][1], scores[i][2])
