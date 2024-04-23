@@ -38,24 +38,16 @@ class Game
   end
 
   def to_frames(score_characters)
-    divided_scores = []
-    temp = []
+    result = []
+    scores = []
     score_characters.each do |character|
-      temp << character
-      next if divided_scores.size == 9
-      next if temp.size != 2 && character != 'X'
+      scores << character
+      next if result.size == 9
+      next if scores.size != 2 && character != 'X'
 
-      divided_scores << temp
-      temp = []
+      result << Frame.new(scores[0], scores[1])
+      scores = []
     end
-    divided_scores << temp # divided_scoresの長さが10の場合のtempを最後に挿入
-
-    Array.new(10) do |i|
-      if i == 9
-        Frame.new(divided_scores[i][0], divided_scores[i][1], divided_scores[i][2])
-      else
-        Frame.new(divided_scores[i][0], divided_scores[i][1])
-      end
-    end
+    result << Frame.new(scores[0], scores[1], scores[2])
   end
 end
