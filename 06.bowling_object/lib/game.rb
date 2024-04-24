@@ -49,5 +49,6 @@ class Game
       scores = []
     end
     result << Frame.new(scores[0], scores[1], scores[2])
+    result
   end
 end
