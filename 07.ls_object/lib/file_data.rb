@@ -12,7 +12,31 @@ class FileData
     @filename.size
   end
 
-  # def file_size
-  #    @file_info.size
-  # end
+  def type
+    @file_info.ftype
+  end
+
+  def permission_mode
+    @file_info.mode.to_s(8)
+  end
+
+  def hard_link
+    @file_info.nlink
+  end
+
+  def user_id
+    @file_info.uid
+  end
+
+  def group_id
+    @file_info.gid
+  end
+
+  def size
+    @file_info.size
+ end
+
+ def modify_time
+    @file_info.mtime
+ end
 end
