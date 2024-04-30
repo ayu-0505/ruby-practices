@@ -3,9 +3,9 @@
 class FileData
   attr_reader :filename
 
-  def initialize(filename, absolute_path = nil)
+  def initialize(filename, path = nil)
     @filename = filename
-    @file_info = File.lstat(absolute_path) unless absolute_path.nil?
+    @file_info = File.lstat(path) unless path.nil?
   end
 
   def filename_length
