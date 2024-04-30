@@ -53,6 +53,6 @@ class FileDateTest < Minitest::Test
   def test_modify_time
     expected = `date -r #{TARGET_PATHNAME} "+%_m %e %R"`.chomp
     assert_kind_of Time, @file.modify_time
-    assert_equal expected, @file.modify_time.strftime('%_m %e %R')
+    assert_equal expected, @file.modify_time.strftime('%_m %e %R') #対象ファイルの更新日時と同じかどうかの確認のため表示形式は問わない
   end
 end
