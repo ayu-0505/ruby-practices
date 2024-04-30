@@ -11,19 +11,15 @@ class FileDateTest < Minitest::Test
   
 
   def setup
-    @file = FileData.new('app', TARGET_PATHNAME)
+    @file = FileData.new(TARGET_PATHNAME)
   end
 
   def test_file_data
     assert @file
   end
 
-  def test_has_file_name
+  def test_has_filename
     assert_equal 'app', @file.filename
-  end
-
-  def test_filename_length
-    assert_equal 3, @file.filename_length 
   end
 
   def test_type
@@ -38,13 +34,14 @@ class FileDateTest < Minitest::Test
     assert_equal 14, @file.hard_link
   end
 
-  def test_user_id
-    assert_equal 501, @file.user_id
-  end
+  # ユーザーネームとグループネームのテストは表示テストでまとめて行う
+  # def test_user_name
+  #   assert_equal 'fukuiayumi', @file.user_name
+  # end
 
-  def test_group_id
-    assert_equal 20, @file.group_id
-  end
+  # def test_group_name
+  #   assert_equal 'staff', @file.group_name
+  # end
 
   def test_file_size
     assert_equal 448, @file.size

@@ -1,15 +1,12 @@
 # frozen_string_literal: true
+require 'etc'
 
 class FileData
   attr_reader :filename
 
-  def initialize(filename, path = nil)
-    @filename = filename
-    @file_info = File.lstat(path) unless path.nil?
-  end
-
-  def filename_length
-    @filename.size
+  def initialize(path)
+    @filename = File.basename(path)
+    @file_info = File.lstat(path)
   end
 
   def type
@@ -24,12 +21,12 @@ class FileData
     @file_info.nlink
   end
 
-  def user_id
-    @file_info.uid
+  def user_name
+    Etc.getpwuid(@file_info.uid).name
   end
 
-  def group_id
-    @file_info.gid
+  def group_name
+    Etc.getgrgid(@file_info.gid).name
   end
 
   def size
