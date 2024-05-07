@@ -10,30 +10,34 @@ attr_reader :file_datas
     end
   end
 
-  def file_name_width
+  def max_file_name_width
     # @file_datas.map(&:filename).map(&:size).max　# mapと畳み込み演算では計算量的にどちらを選択するべきか
     @file_datas.map(&:filename).reduce(0) {|result, path| [result, path.size].max}
   end
 
-  def size_width
-    @file_datas.map(&:size).max.to_s.size
+  def max_size_width
+    @file_datas.map(&:size).map(&:to_i).max.to_s.size
   end
 
-  def hard_link_width
-    @file_datas.map(&:hard_link).max.to_s.size
+  def max_nlink_width
+    @file_datas.map(&:nlink).map(&:to_i).max.to_s.size
   end
 
-  def uid_name_width
+  def max_user_width
     #@file_datas.map(&:user_name).map(&:size).max
     @file_datas.map(&:user_name).reduce(0) {|result, path| [result, path.size].max}
   end
 
-  def gid_name_width
+  def max_group_width
     #@file_datas.map(&:group_name).map(&:size).max
     @file_datas.map(&:group_name).reduce(0) {|result, path| [result, path.size].max}
   end
 
   def count_file_datas
     @file_datas.count
+  end
+
+  def total_blocks
+    @file_datas.sum {|file| file.blocks }
   end
 end

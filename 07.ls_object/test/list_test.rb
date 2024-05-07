@@ -17,16 +17,24 @@ class ListTest < Minitest::Test
     assert_kind_of FileData, @list.file_datas[0]
   end
 
-  def test_file_name_width
+  def test_max_file_name_width
     assert_equal 12, @list.file_name_width
   end
 
-  def test_hard_link_width
-    assert_equal 2, @list.hard_link_width
+  def test_max_nlink_width
+    assert_equal 2, @list.max_nlink_width
   end
 
-  def test_size_width
-    assert_equal 4, @list.size_width
+  def test_max_size_width
+    assert_equal 4, @list.max_size_width
+  end
+
+  def test_max_size_width
+    assert_equal 4, @list.max_size_width
+  end
+
+  def test_total_blocks
+    assert_equal 48, @list.total_blocks
   end
 
   # ユーザーネームとグループネームのテストは表示テストでまとめて行う
