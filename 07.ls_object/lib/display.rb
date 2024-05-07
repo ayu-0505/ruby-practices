@@ -29,25 +29,25 @@ class Display
 
   def render_short_list
     width = @list.max_file_name_width + SHORT_LIST_PADDING
-    files_with_spaces = file_name_list.map { |file| file.ljust(width) }
-    files_number = @list.count_file_datas
-    row_number = (files_number / COLUMN_NUMBER.to_f).ceil
-    (COLUMN_NUMBER - files_number % COLUMN_NUMBER).times { files_with_spaces << '' } if files_number % COLUMN_NUMBER != 0
+    formated_files = file_names.map { |file| file.ljust(width) }
+    file_count = @list.count_file_datas
+    row_number = (file_count / COLUMN_NUMBER.to_f).ceil
+    (COLUMN_NUMBER - file_count % COLUMN_NUMBER).times { formated_files << '' } if file_count % COLUMN_NUMBER != 0
     render_lines = []
-    files_with_spaces.each_slice(row_number) { |file| render_lines << file }
+    formated_files.each_slice(row_number) { |file| render_lines << file }
     render_lines = render_lines.transpose.map {|line| line.join.rstrip }.join("\n")
     render_lines
   end
 
   def render_long_list
     total = "total #{@list.total_blocks}"
-    output_files =  @list.file_datas.map { |file| build_data(file) }.map { |file| format_row(file) }
-    [total, output_files]
+    render_file_datas =  @list.file_datas.map { |file| build_data(file) }.map { |file| format_row(file) }
+    [total, render_file_datas]
   end
 
   private
 
-  def file_name_list
+  def file_names
     @list.file_datas.map(&:filename)
   end
 

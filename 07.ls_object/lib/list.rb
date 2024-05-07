@@ -11,8 +11,7 @@ attr_reader :file_datas
   end
 
   def max_file_name_width
-    # @file_datas.map(&:filename).map(&:size).max　# mapと畳み込み演算では計算量的にどちらを選択するべきか
-    @file_datas.map(&:filename).reduce(0) {|result, path| [result, path.size].max}
+    @file_datas.map(&:filename).map(&:size).max
   end
 
   def max_size_width
@@ -24,13 +23,11 @@ attr_reader :file_datas
   end
 
   def max_user_width
-    #@file_datas.map(&:user_name).map(&:size).max
-    @file_datas.map(&:user_name).reduce(0) {|result, path| [result, path.size].max}
+    @file_datas.map(&:user_name).map(&:size).max
   end
 
   def max_group_width
-    #@file_datas.map(&:group_name).map(&:size).max
-    @file_datas.map(&:group_name).reduce(0) {|result, path| [result, path.size].max}
+    @file_datas.map(&:group_name).map(&:size).max
   end
 
   def count_file_datas

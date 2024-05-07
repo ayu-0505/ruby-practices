@@ -7,8 +7,6 @@ require_relative '../lib/file_data'
 
 class FileDateTest < Minitest::Test
   TARGET_PATHNAME =  Pathname("test/fixtures/sample_directory/app")
-  # TAEGET_FILE = File.new()
-  
 
   def setup
     @file = FileData.new(TARGET_PATHNAME)
@@ -34,15 +32,6 @@ class FileDateTest < Minitest::Test
     assert_equal 14, @file.nlink
   end
 
-  # ユーザーネームとグループネームのテストは表示テストでまとめて行う
-  # def test_user_name
-  #   assert_equal 'fukuiayumi', @file.user_name
-  # end
-
-  # def test_group_name
-  #   assert_equal 'staff', @file.group_name
-  # end
-
   def test_size
     assert_equal 448, @file.size
   end
@@ -53,7 +42,7 @@ class FileDateTest < Minitest::Test
 
   def test_mtime
     expected = `date -r #{TARGET_PATHNAME} "+%_m %e %R"`.chomp
-    assert_kind_of Time, @file.modify_time
-    assert_equal expected, @file.modify_time.strftime('%_m %e %R') #対象ファイルの更新日時と同じかどうかの確認のため表示形式は問わない
+    assert_kind_of Time, @file.mtime
+    assert_equal expected, @file.mtime.strftime('%_m %e %R') #対象ファイルの更新日時と同じかどうかの確認のため表示形式は問わない
   end
 end

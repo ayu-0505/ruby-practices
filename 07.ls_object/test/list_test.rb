@@ -18,7 +18,7 @@ class ListTest < Minitest::Test
   end
 
   def test_max_file_name_width
-    assert_equal 12, @list.file_name_width
+    assert_equal 12, @list.max_file_name_width
   end
 
   def test_max_nlink_width
@@ -36,14 +36,4 @@ class ListTest < Minitest::Test
   def test_total_blocks
     assert_equal 48, @list.total_blocks
   end
-
-  # ユーザーネームとグループネームのテストは表示テストでまとめて行う
-  # def test_uid_name_width
-  #   assert_equal 10, @list.uid_name_width
-  # end
-
-  # def test_gid_name_width
-  #   assert_equal 5, @list.gid_name_width
-  # end
-  
 end
