@@ -26,12 +26,12 @@ class FileDateTest < Minitest::Test
     assert_equal "directory", @file.type
   end
 
-  def test_permission_mode
-    assert_equal "40755", @file.permission_mode
+  def test_mode
+    assert_equal "40755", @file.mode
   end
 
-  def test_hard_link
-    assert_equal 14, @file.hard_link
+  def test_nlink
+    assert_equal 14, @file.nlink
   end
 
   # ユーザーネームとグループネームのテストは表示テストでまとめて行う
@@ -43,11 +43,15 @@ class FileDateTest < Minitest::Test
   #   assert_equal 'staff', @file.group_name
   # end
 
-  def test_file_size
+  def test_size
     assert_equal 448, @file.size
   end
 
-  def test_modify_time
+  def test_blocks
+    assert_equal 0, @file.blocks
+  end
+
+  def test_mtime
     expected = `date -r #{TARGET_PATHNAME} "+%_m %e %R"`.chomp
     assert_kind_of Time, @file.modify_time
     assert_equal expected, @file.modify_time.strftime('%_m %e %R') #対象ファイルの更新日時と同じかどうかの確認のため表示形式は問わない

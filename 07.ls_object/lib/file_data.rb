@@ -13,11 +13,11 @@ class FileData
     @file_info.ftype
   end
 
-  def permission_mode
+  def mode
     @file_info.mode.to_s(8)
   end
 
-  def hard_link
+  def nlink
     @file_info.nlink
   end
 
@@ -33,7 +33,11 @@ class FileData
     @file_info.size
  end
 
- def modify_time
+ def mtime
     @file_info.mtime
+ end
+
+ def blocks
+  @file_info.blocks
  end
 end
