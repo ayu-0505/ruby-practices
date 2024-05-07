@@ -4,6 +4,13 @@ require_relative 'list'
 class Display
   COLUMN_NUMBER = 3
   SHORT_LIST_PADDING = 7
+  FILETYPES = { 'fifo' => 'p',
+              'characterSpecial' => 'c',
+              'directory' => 'd',
+              'blockSpecial' => 'b',
+              'file' => '_',
+              'link' => 'l',
+              'socket' => 's' }.freeze
   MODE_TABLE = {
   '0' => '---',
   '1' => '--x',
@@ -21,8 +28,8 @@ class Display
   end
 
   def render_short_list
-    file_width = @list.file_name_width + SHORT_LIST_PADDING
-    files_with_spaces = file_name_list.map { |file| file.ljust(file_width) }
+    width = @list.max_file_name_width + SHORT_LIST_PADDING
+    files_with_spaces = file_name_list.map { |file| file.ljust(width) }
     files_number = @list.count_file_datas
     row_number = (files_number / COLUMN_NUMBER.to_f).ceil
     (COLUMN_NUMBER - files_number % COLUMN_NUMBER).times { files_with_spaces << '' } if files_number % COLUMN_NUMBER != 0
@@ -32,16 +39,69 @@ class Display
     render_lines
   end
 
-  private
+  def render_long_list
+    total = "total #{@list.total_blocks}"
+    output_files =  @list.file_datas.map { |file| build_data(file) }.map { |file| format_row(file) }
+    [total, output_files]
+  end
 
-  # def output(output_files)
-  #   output_files.each do |file|
-  #     file.each { |filename| print filename }
-  #     puts "\n"
-  #   end
-  # end
+  private
 
   def file_name_list
     @list.file_datas.map(&:filename)
+  end
+
+  def build_data(file) # FileDataクラス
+    {
+      type: convert_type(file.type),
+      mode: convert_mode(file.mode),
+      nlink: resize_nlink(file.nlink),
+      user: resize_user(file.user_name),
+      group: resize_group(file.group_name),
+      size: resize_byte_size(file.size),
+      mtime: convert_modify_time(file.mtime),
+      filename: file.filename
+    }
+  end
+
+  def format_row(data) #data = hash
+    [
+      data[:type],
+      data[:mode],
+      "  #{data[:nlink].rjust(@list.max_nlink_width)}",
+      " #{data[:user].ljust(@list.max_user_width)}",
+      "  #{data[:group].ljust(@list.max_group_width)}",
+      "  #{data[:size].rjust(@list.max_size_width)}",
+      " #{data[:mtime]}",
+      " #{data[:filename]}"
+    ].join
+  end
+
+  def convert_type(type)
+    FILETYPES[type]
+  end
+
+  def convert_mode(mode)
+    (-3..-1).map {|num| MODE_TABLE[mode[num]] }.join
+  end
+
+  def resize_nlink(nlink)
+      nlink.to_s.rjust(@list.max_nlink_width)
+  end
+
+  def resize_user(user)
+     user.ljust(@list.max_user_width)
+  end
+
+  def resize_group(group)
+    group.ljust(@list.max_group_width)
+  end
+
+  def resize_byte_size(size)
+    size.to_s.rjust(@list.max_size_width)
+  end
+
+  def convert_modify_time(time)
+    time.strftime('%_m %e %R')
   end
 end
