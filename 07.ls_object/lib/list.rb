@@ -5,9 +5,7 @@ class List
 attr_reader :file_datas
 
   def initialize(paths)
-    @file_datas = paths.map do |path|
-      FileData.new(path)
-    end
+    @file_datas = paths.map { |path| FileData.new(path) }
   end
 
   def max_file_name_width

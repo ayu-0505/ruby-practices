@@ -41,7 +41,7 @@ class Display
 
   def render_long_list
     total = "total #{@list.total_blocks}"
-    render_file_datas =  @list.file_datas.map { |file| build_data(file) }.map { |file| format_row(file) }
+    render_file_datas = @list.file_datas.map { |file| build_data(file) }.map { |file| format_row(file) }
     [total, render_file_datas]
   end
 
@@ -51,7 +51,7 @@ class Display
     @list.file_datas.map(&:filename)
   end
 
-  def build_data(file) # FileDataクラス
+  def build_data(file)
     {
       type: convert_type(file.type),
       mode: convert_mode(file.mode),
@@ -64,7 +64,7 @@ class Display
     }
   end
 
-  def format_row(data) #data = hash
+  def format_row(data)
     [
       data[:type],
       data[:mode],
