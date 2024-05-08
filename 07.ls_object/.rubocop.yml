@@ -1,14 +1,7 @@
+inherit_gem:
+  rubocop-fjord:
+    - "config/rubocop.yml"
+
 AllCops:
-  # 最新のルールを適用する
-  NewCops: enable
   Exclude:
     - "test/**/*"
-
-### Style
-
-# 日本語コメントを許可
-Style/AsciiComments:
-  Enabled: false
-# クラスとモジュールのトップレベルドキュメントがなくても許可
-Style/Documentation:
-  Enabled: false
