@@ -1,27 +1,29 @@
 # frozen_string_literal: true
+
 require_relative 'list'
 
 class Display
   COLUMN_NUMBER = 3
   SHORT_LIST_PADDING = 7
-  FILETYPES = { 'fifo' => 'p',
-              'characterSpecial' => 'c',
-              'directory' => 'd',
-              'blockSpecial' => 'b',
-              'file' => '_',
-              'link' => 'l',
-              'socket' => 's' }.freeze
+  FILETYPES = {
+    'fifo' => 'p',
+    'characterSpecial' => 'c',
+    'directory' => 'd',
+    'blockSpecial' => 'b',
+    'file' => '_',
+    'link' => 'l',
+    'socket' => 's'
+  }.freeze
   MODE_TABLE = {
-  '0' => '---',
-  '1' => '--x',
-  '2' => '-w-',
-  '3' => '-wx',
-  '4' => 'r--',
-  '5' => 'r-x',
-  '6' => 'rw-',
-  '7' => 'rwx'
-}.freeze
-
+    '0' => '---',
+    '1' => '--x',
+    '2' => '-w-',
+    '3' => '-wx',
+    '4' => 'r--',
+    '5' => 'r-x',
+    '6' => 'rw-',
+    '7' => 'rwx'
+  }.freeze
 
   def initialize(paths)
     @list = List.new(paths)
@@ -35,7 +37,7 @@ class Display
     (COLUMN_NUMBER - file_count % COLUMN_NUMBER).times { formated_files << '' } if file_count % COLUMN_NUMBER != 0
     render_lines = []
     formated_files.each_slice(row_number) { |file| render_lines << file }
-    render_lines = render_lines.transpose.map {|line| line.join.rstrip }.join("\n")
+    render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
     render_lines
   end
 
@@ -82,15 +84,15 @@ class Display
   end
 
   def convert_mode(mode)
-    (-3..-1).map {|num| MODE_TABLE[mode[num]] }.join
+    (-3..-1).map { |num| MODE_TABLE[mode[num]] }.join
   end
 
   def resize_nlink(nlink)
-      nlink.to_s.rjust(@list.max_nlink_width)
+    nlink.to_s.rjust(@list.max_nlink_width)
   end
 
   def resize_user(user)
-     user.ljust(@list.max_user_width)
+    user.ljust(@list.max_user_width)
   end
 
   def resize_group(group)

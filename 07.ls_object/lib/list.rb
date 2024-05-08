@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 require_relative 'file_data'
 
 class List
-attr_reader :file_datas
+  attr_reader :file_datas
 
   def initialize(paths)
     @file_datas = paths.map { |path| FileData.new(path) }
@@ -33,6 +34,6 @@ attr_reader :file_datas
   end
 
   def total_blocks
-    @file_datas.sum {|file| file.blocks }
+    @file_datas.sum(&:blocks)
   end
 end

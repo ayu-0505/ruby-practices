@@ -3,10 +3,9 @@
 require 'minitest/autorun'
 require 'pathname'
 require_relative '../lib/display'
-require "stringio"
 
 class DisplayTest < Minitest::Test
-  TARGET_PATHNAME =  Pathname("test/fixtures/sample_directory/*")
+  TARGET_PATHNAME = Pathname('test/fixtures/sample_directory/*')
 
   def test_render_short_list
     paths = Dir.glob(TARGET_PATHNAME)
@@ -58,26 +57,23 @@ class DisplayTest < Minitest::Test
     paths = Dir.glob(TARGET_PATHNAME)
     display = Display.new(paths)
 
-    expected = ["total 48",
-                 [
-                   "_rw-r--r--   1 fukuiayumi  staff  2300  4 25 09:43 Gemfile",
-                   "_rw-r--r--   1 fukuiayumi  staff  6121  4 25 09:43 Gemfile.lock",
-                   "_rw-r--r--   1 fukuiayumi  staff   374  4 25 09:43 README.md",
-                   "_rw-r--r--   1 fukuiayumi  staff   227  4 25 09:43 Rakefile",
-                   "drwxr-xr-x  14 fukuiayumi  staff   448  4 25 09:43 app",
-                   "drwxr-xr-x   7 fukuiayumi  staff   224  4 25 09:43 bin",
-                   "drwxr-xr-x  16 fukuiayumi  staff   512  4 25 09:43 config",
-                   "_rw-r--r--   1 fukuiayumi  staff   160  4 25 09:43 config.ru",
-                   "drwxr-xr-x   6 fukuiayumi  staff   192  4 25 09:43 db",
-                   "drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 lib",
-                   "drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 log",
-                   "drwxr-xr-x   9 fukuiayumi  staff   288  4 25 09:43 public",
-                   "drwxr-xr-x  20 fukuiayumi  staff   640  4 25 09:43 storage",
-                   "drwxr-xr-x  12 fukuiayumi  staff   384  4 25 09:43 test",
-                   "drwxr-xr-x   9 fukuiayumi  staff   288  4 25 09:43 tmp",
-                   "drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 vendor"
-                 ]
-                ]
+    expected = ['total 48',
+                ['_rw-r--r--   1 fukuiayumi  staff  2300  4 25 09:43 Gemfile',
+                 '_rw-r--r--   1 fukuiayumi  staff  6121  4 25 09:43 Gemfile.lock',
+                 '_rw-r--r--   1 fukuiayumi  staff   374  4 25 09:43 README.md',
+                 '_rw-r--r--   1 fukuiayumi  staff   227  4 25 09:43 Rakefile',
+                 'drwxr-xr-x  14 fukuiayumi  staff   448  4 25 09:43 app',
+                 'drwxr-xr-x   7 fukuiayumi  staff   224  4 25 09:43 bin',
+                 'drwxr-xr-x  16 fukuiayumi  staff   512  4 25 09:43 config',
+                 '_rw-r--r--   1 fukuiayumi  staff   160  4 25 09:43 config.ru',
+                 'drwxr-xr-x   6 fukuiayumi  staff   192  4 25 09:43 db',
+                 'drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 lib',
+                 'drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 log',
+                 'drwxr-xr-x   9 fukuiayumi  staff   288  4 25 09:43 public',
+                 'drwxr-xr-x  20 fukuiayumi  staff   640  4 25 09:43 storage',
+                 'drwxr-xr-x  12 fukuiayumi  staff   384  4 25 09:43 test',
+                 'drwxr-xr-x   9 fukuiayumi  staff   288  4 25 09:43 tmp',
+                 'drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 vendor']]
 
     assert_equal expected, display.render_long_list
   end

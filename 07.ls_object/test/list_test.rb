@@ -5,7 +5,7 @@ require 'pathname'
 require_relative '../lib/list'
 
 class ListTest < Minitest::Test
-  TARGET_PATHNAME =  Pathname("test/fixtures/sample_directory/*")
+  TARGET_PATHNAME = Pathname('test/fixtures/sample_directory/*')
   PATHS = Dir.glob(TARGET_PATHNAME)
 
   def setup
@@ -13,7 +13,7 @@ class ListTest < Minitest::Test
   end
 
   def test_list
-    assert @list 
+    assert @list
     assert_kind_of FileData, @list.file_datas[0]
   end
 
@@ -23,10 +23,6 @@ class ListTest < Minitest::Test
 
   def test_max_nlink_width
     assert_equal 2, @list.max_nlink_width
-  end
-
-  def test_max_size_width
-    assert_equal 4, @list.max_size_width
   end
 
   def test_max_size_width

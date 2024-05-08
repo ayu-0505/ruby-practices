@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'etc'
 
 class FileData
@@ -31,13 +32,13 @@ class FileData
 
   def size
     @file_info.size
- end
+  end
 
- def mtime
+  def mtime
     @file_info.mtime
- end
+  end
 
- def blocks
-  @file_info.blocks
- end
+  def blocks
+    @file_info.blocks
+  end
 end
