@@ -34,11 +34,8 @@ class Display
     formated_files = file_names.map { |file| file.ljust(width) }
     file_count = @list.count_file_datas
     row_number = (file_count / COLUMN_NUMBER.to_f).ceil
-    (COLUMN_NUMBER - file_count % COLUMN_NUMBER).times { formated_files << '' } if file_count % COLUMN_NUMBER != 0
-    render_lines = []
-    formated_files.each_slice(row_number) { |file| render_lines << file }
-    render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
-    render_lines
+    (COLUMN_NUMBER - (file_count % COLUMN_NUMBER)).times { formated_files << '' } if file_count % COLUMN_NUMBER != 0
+    render_lines(formated_files, row_number)
   end
 
   def render_long_list
@@ -51,6 +48,12 @@ class Display
 
   def file_names
     @list.file_datas.map(&:filename)
+  end
+
+  def render_lines(formated_files, row_number)
+    render_lines = []
+    formated_files.each_slice(row_number) { |file| render_lines << file }
+    render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
   end
 
   def build_data(file)
