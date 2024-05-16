@@ -3,7 +3,5 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rubocop'
-  gem 'rubocop-fjord'
-  gem 'ruby-lsp'
+  gem 'rubocop-fjord', require: false
 end
