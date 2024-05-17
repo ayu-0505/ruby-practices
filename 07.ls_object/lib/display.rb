@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'list'
+require_relative 'file_data'
 
 class Display
   COLUMN_NUMBER = 3
@@ -26,28 +26,29 @@ class Display
   }.freeze
 
   def initialize(paths)
-    @list = List.new(paths)
+    @files = paths.map { |path| FileData.new(path) }
+    # @list = List.new(paths)
   end
 
   def render_short_list
-    width = @list.max_file_name_width + SHORT_LIST_PADDING
-    formated_files = file_names.map { |file| file.ljust(width) }
-    file_count = @list.count_file_datas
+    width = max_base_name_width + SHORT_LIST_PADDING
+    formated_files = base_names.map { |file| file.ljust(width) }
+    file_count = count_files
     row_number = (file_count / COLUMN_NUMBER.to_f).ceil
     (COLUMN_NUMBER - (file_count % COLUMN_NUMBER)).times { formated_files << '' } if file_count % COLUMN_NUMBER != 0
     render_lines(formated_files, row_number)
   end
 
   def render_long_list
-    total = "total #{@list.total_blocks}"
-    render_file_datas = @list.file_datas.map { |file| build_data(file) }.map { |file| format_row(file) }
-    [total, render_file_datas]
+    total = "total #{total_blocks}"
+    render_files = @files.map { |file| build_data(file) }.map { |file| format_row(file) }
+    [total, render_files]
   end
 
   private
 
-  def file_names
-    @list.file_datas.map(&:base_name)
+  def base_names
+    @files.map(&:base_name)
   end
 
   def render_lines(formated_files, row_number)
@@ -73,10 +74,10 @@ class Display
     [
       data[:type],
       data[:mode],
-      "  #{data[:nlink].rjust(@list.max_nlink_width)}",
-      " #{data[:user].ljust(@list.max_user_width)}",
-      "  #{data[:group].ljust(@list.max_group_width)}",
-      "  #{data[:size].rjust(@list.max_size_width)}",
+      "  #{data[:nlink].rjust(max_nlink_width)}",
+      " #{data[:user].ljust(max_user_width)}",
+      "  #{data[:group].ljust(max_group_width)}",
+      "  #{data[:size].rjust(max_size_width)}",
       " #{data[:mtime]}",
       " #{data[:base_name]}"
     ].join
@@ -91,22 +92,50 @@ class Display
   end
 
   def resize_nlink(nlink)
-    nlink.to_s.rjust(@list.max_nlink_width)
+    nlink.to_s.rjust(max_nlink_width)
   end
 
   def resize_user(user)
-    user.ljust(@list.max_user_width)
+    user.ljust(max_user_width)
   end
 
   def resize_group(group)
-    group.ljust(@list.max_group_width)
+    group.ljust(max_group_width)
   end
 
   def resize_byte_size(size)
-    size.to_s.rjust(@list.max_size_width)
+    size.to_s.rjust(max_size_width)
   end
 
   def convert_modify_time(time)
     time.strftime('%_m %e %R')
+  end
+
+  def max_base_name_width
+    @files.map { |file_data| file_data.base_name.size }.max
+  end
+
+  def max_size_width
+    @files.map { |file_data| file_data.size.to_i }.max.to_s.size
+  end
+
+  def max_nlink_width
+    @files.map { |file_data| file_data.nlink.to_i }.max.to_s.size
+  end
+
+  def max_user_width
+    @files.map { |file_data| file_data.user_name.size }.max
+  end
+
+  def max_group_width
+    @files.map { |file_data| file_data.group_name.size }.max
+  end
+
+  def count_files
+    @files.count
+  end
+
+  def total_blocks
+    @files.sum(&:blocks)
   end
 end
