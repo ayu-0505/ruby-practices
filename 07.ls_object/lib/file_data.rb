@@ -3,42 +3,42 @@
 require 'etc'
 
 class FileData
-  attr_reader :filename
+  attr_reader :base_name
 
   def initialize(path)
-    @filename = File.basename(path)
-    @file_info = File.lstat(path)
+    @base_name = File.basename(path)
+    @file_status = File.lstat(path)
   end
 
   def type
-    @file_info.ftype
+    @file_status.ftype
   end
 
   def mode
-    @file_info.mode.to_s(8)
+    @file_status.mode.to_s(8)
   end
 
   def nlink
-    @file_info.nlink
+    @file_status.nlink
   end
 
   def user_name
-    Etc.getpwuid(@file_info.uid).name
+    Etc.getpwuid(@file_status.uid).name
   end
 
   def group_name
-    Etc.getgrgid(@file_info.gid).name
+    Etc.getgrgid(@file_status.gid).name
   end
 
   def size
-    @file_info.size
+    @file_status.size
   end
 
   def mtime
-    @file_info.mtime
+    @file_status.mtime
   end
 
   def blocks
-    @file_info.blocks
+    @file_status.blocks
   end
 end

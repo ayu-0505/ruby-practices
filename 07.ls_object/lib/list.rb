@@ -10,23 +10,33 @@ class List
   end
 
   def max_file_name_width
-    @file_datas.map { |file_data| file_data.filename.size }.max
+    @file_datas.map do |file_data|
+      file_data.base_name.size
+    end.max
   end
 
   def max_size_width
-    @file_datas.map { |file_data| file_data.size.to_i }.max.to_s.size
+    @file_datas.map do |file_data|
+      file_data.size.to_i
+    end.max.to_s.size
   end
 
   def max_nlink_width
-    @file_datas.map { |file_data| file_data.nlink.to_i }.max.to_s.size
+    @file_datas.map do |file_data|
+      file_data.nlink.to_i
+    end.max.to_s.size
   end
 
   def max_user_width
-    @file_datas.map { |file_data| file_data.user_name.size }.max
+    @file_datas.map do |file_data|
+      file_data.user_name.size
+    end.max
   end
 
   def max_group_width
-    @file_datas.map { |file_data| file_data.group_name.size }.max
+    @file_datas.map do |file_data|
+      file_data.group_name.size
+    end.max
   end
 
   def count_file_datas

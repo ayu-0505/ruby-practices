@@ -15,8 +15,8 @@ class FileDateTest < Minitest::Test
     assert @file
   end
 
-  def test_has_filename
-    assert_equal 'app', @file.filename
+  def test_has_base_name
+    assert_equal 'app', @file.base_name
   end
 
   def test_type

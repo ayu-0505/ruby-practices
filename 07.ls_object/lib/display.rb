@@ -47,7 +47,7 @@ class Display
   private
 
   def file_names
-    @list.file_datas.map(&:filename)
+    @list.file_datas.map(&:base_name)
   end
 
   def render_lines(formated_files, row_number)
@@ -65,7 +65,7 @@ class Display
       group: resize_group(file.group_name),
       size: resize_byte_size(file.size),
       mtime: convert_modify_time(file.mtime),
-      filename: file.filename
+      base_name: file.base_name
     }
   end
 
@@ -78,7 +78,7 @@ class Display
       "  #{data[:group].ljust(@list.max_group_width)}",
       "  #{data[:size].rjust(@list.max_size_width)}",
       " #{data[:mtime]}",
-      " #{data[:filename]}"
+      " #{data[:base_name]}"
     ].join
   end
 
