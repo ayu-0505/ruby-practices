@@ -37,9 +37,9 @@ class Display
   end
 
   def render_long_list
-    max_sizes = find_max_sizes
+    max_widths = find_max_widths
     total = "total #{total_blocks}"
-    render_files = @files.map { |file| build_data(file, max_sizes) }.map { |file| format_row(file) }
+    render_files = @files.map { |file| build_data(file, max_widths) }.map { |file| format_row(file) }
     [total, render_files]
   end
 
@@ -63,7 +63,7 @@ class Display
     render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
   end
 
-  def find_max_sizes
+  def find_max_widths
     {
       size: max_size_width,
       nlink: max_nlink_width,
@@ -92,14 +92,14 @@ class Display
     @files.sum(&:blocks)
   end
 
-  def build_data(file, max_sizes)
+  def build_data(file, max_widths)
     {
       type: convert_type(file.type),
       mode: convert_mode(file.mode),
-      nlink: resize_nlink(file.nlink, max_sizes),
-      user: resize_user(file.user_name, max_sizes),
-      group: resize_group(file.group_name, max_sizes),
-      size: resize_byte_size(file.size, max_sizes),
+      nlink: resize_nlink(file.nlink, max_widths),
+      user: resize_user(file.user_name, max_widths),
+      group: resize_group(file.group_name, max_widths),
+      size: resize_byte_size(file.size, max_widths),
       mtime: convert_modify_time(file.mtime),
       base_name: file.base_name
     }
@@ -113,20 +113,20 @@ class Display
     (-3..-1).map { |num| MODE_TABLE[mode[num]] }.join
   end
 
-  def resize_nlink(nlink, max_sizes)
-    nlink.to_s.rjust(max_sizes[:nlink])
+  def resize_nlink(nlink, max_widths)
+    nlink.to_s.rjust(max_widths[:nlink])
   end
 
-  def resize_user(user, max_sizes)
-    user.ljust(max_sizes[:user])
+  def resize_user(user, max_widths)
+    user.ljust(max_widths[:user])
   end
 
-  def resize_group(group, max_sizes)
-    group.ljust(max_sizes[:group])
+  def resize_group(group, max_widths)
+    group.ljust(max_widths[:group])
   end
 
-  def resize_byte_size(size, max_sizes)
-    size.to_s.rjust(max_sizes[:size])
+  def resize_byte_size(size, max_widths)
+    size.to_s.rjust(max_widths[:size])
   end
 
   def convert_modify_time(time)
