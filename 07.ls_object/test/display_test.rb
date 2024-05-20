@@ -58,14 +58,14 @@ class DisplayTest < Minitest::Test
     display = Display.new(paths)
 
     expected = ['total 48',
-                ['_rw-r--r--   1 fukuiayumi  staff  2300  4 25 09:43 Gemfile',
+                ['_rw-r--r--   1 fukuiayumi  staff  2327  5 17 15:43 Gemfile',
                  '_rw-r--r--   1 fukuiayumi  staff  6121  4 25 09:43 Gemfile.lock',
                  '_rw-r--r--   1 fukuiayumi  staff   374  4 25 09:43 README.md',
-                 '_rw-r--r--   1 fukuiayumi  staff   227  4 25 09:43 Rakefile',
+                 '_rw-r--r--   1 fukuiayumi  staff   258  5 17 15:43 Rakefile',
                  'drwxr-xr-x  14 fukuiayumi  staff   448  4 25 09:43 app',
                  'drwxr-xr-x   7 fukuiayumi  staff   224  4 25 09:43 bin',
                  'drwxr-xr-x  16 fukuiayumi  staff   512  4 25 09:43 config',
-                 '_rw-r--r--   1 fukuiayumi  staff   160  4 25 09:43 config.ru',
+                 '_rw-r--r--   1 fukuiayumi  staff   191  5 17 15:43 config.ru',
                  'drwxr-xr-x   6 fukuiayumi  staff   192  4 25 09:43 db',
                  'drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 lib',
                  'drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 log',
