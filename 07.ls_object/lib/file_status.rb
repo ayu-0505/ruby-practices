@@ -2,43 +2,43 @@
 
 require 'etc'
 
-class FileData
+class FileStatus
   attr_reader :path
 
   def initialize(path)
     @path = path
-    @file_status = File.lstat(path)
+    @status = File.lstat(path)
   end
 
   def type
-    @file_status.ftype
+    @status.ftype
   end
 
   def mode
-    @file_status.mode.to_s(8)
+    @status.mode.to_s(8)
   end
 
   def nlink
-    @file_status.nlink
+    @status.nlink
   end
 
   def user_name
-    Etc.getpwuid(@file_status.uid).name
+    Etc.getpwuid(@status.uid).name
   end
 
   def group_name
-    Etc.getgrgid(@file_status.gid).name
+    Etc.getgrgid(@status.gid).name
   end
 
   def size
-    @file_status.size
+    @status.size
   end
 
   def mtime
-    @file_status.mtime
+    @status.mtime
   end
 
   def blocks
-    @file_status.blocks
+    @status.blocks
   end
 end

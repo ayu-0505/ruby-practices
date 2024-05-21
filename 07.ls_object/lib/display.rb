@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'file_data'
+require_relative 'file_status'
 
 class Display
   COLUMN_COUNT = 3
@@ -26,7 +26,7 @@ class Display
   }.freeze
 
   def initialize(paths)
-    @files = paths.map { |path| FileData.new(path) }
+    @file_statuses = paths.map { |path| FileStatus.new(path) }
   end
 
   def render(long: false)
@@ -34,39 +34,39 @@ class Display
       long_list
     else
       width = max_base_name_width + SHORT_LIST_PADDING
-      formated_files = @files.map { |file| file.path.ljust(width) }
-      file_count = @files.count
+      formated_file_statuses = @file_statuses.map { |file| file.path.ljust(width) }
+      file_count = @file_statuses.count
       row_number = (file_count / COLUMN_COUNT.to_f).ceil
-      (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_files << '' } if file_count % COLUMN_COUNT != 0
-      render_lines(formated_files, row_number)
+      (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_file_statuses << '' } if file_count % COLUMN_COUNT != 0
+      render_lines(formated_file_statuses, row_number)
     end
   end
 
   def long_list
     max_widths = find_max_widths
-    total = "total #{@files.sum(&:blocks)}"
-    render_files = @files.map { |file| build_data(file, max_widths) }.map { |file| format_row(file) }
-    [total, render_files]
+    total = "total #{@file_statuses.sum(&:blocks)}"
+    render_file_statuses = @file_statuses.map { |file| build_data(file, max_widths) }.map { |file| format_row(file) }
+    [total, render_file_statuses]
   end
 
   private
 
   def max_base_name_width
-    @files.map { |file| file.path.size }.max
+    @file_statuses.map { |file| file.path.size }.max
   end
 
-  def render_lines(formated_files, row_number)
+  def render_lines(formated_file_statuses, row_number)
     render_lines = []
-    formated_files.each_slice(row_number) { |file| render_lines << file }
+    formated_file_statuses.each_slice(row_number) { |file| render_lines << file }
     render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
   end
 
   def find_max_widths
     {
-      size: @files.map { |file| file.size.to_i }.max.to_s.size,
-      nlink: @files.map { |file| file.nlink.to_i }.max.to_s.size,
-      user: @files.map { |file| file.user_name.size }.max,
-      group: @files.map { |file| file.group_name.size }.max
+      size: @file_statuses.map { |file| file.size.to_i }.max.to_s.size,
+      nlink: @file_statuses.map { |file| file.nlink.to_i }.max.to_s.size,
+      user: @file_statuses.map { |file| file.user_name.size }.max,
+      group: @file_statuses.map { |file| file.group_name.size }.max
     }
   end
 
