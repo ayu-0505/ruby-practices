@@ -1,28 +1,30 @@
 # frozen_string_literal: true
 
 require_relative 'file_data'
-COLUMN_NUMBER = 3
-SHORT_LIST_PADDING = 7
-FILETYPES = {
-  'fifo' => 'p',
-  'characterSpecial' => 'c',
-  'directory' => 'd',
-  'blockSpecial' => 'b',
-  'file' => '_',
-  'link' => 'l',
-  'socket' => 's'
-}.freeze
-MODE_TABLE = {
-  '0' => '---',
-  '1' => '--x',
-  '2' => '-w-',
-  '3' => '-wx',
-  '4' => 'r--',
-  '5' => 'r-x',
-  '6' => 'rw-',
-  '7' => 'rwx'
-}.freeze
+
 class Display
+  COLUMN_COUNT = 3
+  SHORT_LIST_PADDING = 7
+  FILETYPES = {
+    'fifo' => 'p',
+    'characterSpecial' => 'c',
+    'directory' => 'd',
+    'blockSpecial' => 'b',
+    'file' => '_',
+    'link' => 'l',
+    'socket' => 's'
+  }.freeze
+  MODE_TABLE = {
+    '0' => '---',
+    '1' => '--x',
+    '2' => '-w-',
+    '3' => '-wx',
+    '4' => 'r--',
+    '5' => 'r-x',
+    '6' => 'rw-',
+    '7' => 'rwx'
+  }.freeze
+
   def initialize(paths)
     @files = paths.map { |path| FileData.new(path) }
   end
@@ -31,8 +33,8 @@ class Display
     width = max_base_name_width + SHORT_LIST_PADDING
     formated_files = @files.map { |file| file.base_name.ljust(width) }
     file_count = @files.count
-    row_number = (file_count / COLUMN_NUMBER.to_f).ceil
-    (COLUMN_NUMBER - (file_count % COLUMN_NUMBER)).times { formated_files << '' } if file_count % COLUMN_NUMBER != 0
+    row_number = (file_count / COLUMN_COUNT.to_f).ceil
+    (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_files << '' } if file_count % COLUMN_COUNT != 0
     render_lines(formated_files, row_number)
   end
 
