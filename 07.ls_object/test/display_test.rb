@@ -7,7 +7,7 @@ require_relative '../lib/display'
 class DisplayTest < Minitest::Test
   TARGET_PATHNAME = Pathname('test/fixtures/sample_directory/*')
 
-  def test_render_short_list
+  def test_render
     paths = Dir.glob(TARGET_PATHNAME)
     display = Display.new(paths)
     expected = <<~TEXT.chomp
@@ -19,10 +19,10 @@ class DisplayTest < Minitest::Test
       bin                public
     TEXT
 
-    assert_equal expected, display.render_short_list
+    assert_equal expected, display.render
   end
 
-  def test_render_short_list_reverse
+  def test_render_at_reverse
     paths = Dir.glob(TARGET_PATHNAME).reverse
     display = Display.new(paths)
     expected = <<~TEXT.chomp
@@ -34,10 +34,10 @@ class DisplayTest < Minitest::Test
       log                app
     TEXT
 
-    assert_equal expected, display.render_short_list
+    assert_equal expected, display.render
   end
 
-  def test_render_short_list_with_dotfiles
+  def test_render_with_dotfiles
     paths = Dir.glob(TARGET_PATHNAME, File::FNM_DOTMATCH)
     display = Display.new(paths)
     expected = <<~TEXT.chomp
@@ -50,7 +50,7 @@ class DisplayTest < Minitest::Test
       Rakefile            log
     TEXT
 
-    assert_equal expected, display.render_short_list
+    assert_equal expected, display.render
   end
 
   def test_render_long_list
@@ -75,6 +75,6 @@ class DisplayTest < Minitest::Test
                  'drwxr-xr-x   9 fukuiayumi  staff   288  4 25 09:43 tmp',
                  'drwxr-xr-x   4 fukuiayumi  staff   128  4 25 09:43 vendor']]
 
-    assert_equal expected, display.render_long_list
+    assert_equal expected, display.render(long: true)
   end
 end
