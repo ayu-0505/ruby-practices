@@ -8,4 +8,4 @@ params = ARGV.getopts('arl')
 paths = params['a'] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
 sorted_paths = params['r'] ? paths.reverse : paths
 display = Display.new(sorted_paths)
-puts params['l'] ? display.render_long_list : display.render_short_list
+puts display.render(long: params['l'])

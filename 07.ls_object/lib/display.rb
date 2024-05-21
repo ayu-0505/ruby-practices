@@ -29,16 +29,20 @@ class Display
     @files = paths.map { |path| FileData.new(path) }
   end
 
-  def render_short_list
-    width = max_base_name_width + SHORT_LIST_PADDING
-    formated_files = @files.map { |file| file.base_name.ljust(width) }
-    file_count = @files.count
-    row_number = (file_count / COLUMN_COUNT.to_f).ceil
-    (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_files << '' } if file_count % COLUMN_COUNT != 0
-    render_lines(formated_files, row_number)
+  def render(long: false)
+    if long
+      long_list
+    else
+      width = max_base_name_width + SHORT_LIST_PADDING
+      formated_files = @files.map { |file| file.base_name.ljust(width) }
+      file_count = @files.count
+      row_number = (file_count / COLUMN_COUNT.to_f).ceil
+      (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_files << '' } if file_count % COLUMN_COUNT != 0
+      render_lines(formated_files, row_number)
+    end
   end
 
-  def render_long_list
+  def long_list
     max_widths = find_max_widths
     total = "total #{@files.sum(&:blocks)}"
     render_files = @files.map { |file| build_data(file, max_widths) }.map { |file| format_row(file) }
