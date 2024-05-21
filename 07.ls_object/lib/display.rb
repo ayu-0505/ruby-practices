@@ -34,7 +34,7 @@ class Display
       long_list
     else
       width = max_base_name_width + SHORT_LIST_PADDING
-      formated_files = @files.map { |file| file.base_name.ljust(width) }
+      formated_files = @files.map { |file| file.path.ljust(width) }
       file_count = @files.count
       row_number = (file_count / COLUMN_COUNT.to_f).ceil
       (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_files << '' } if file_count % COLUMN_COUNT != 0
@@ -52,7 +52,7 @@ class Display
   private
 
   def max_base_name_width
-    @files.map { |file| file.base_name.size }.max
+    @files.map { |file| file.path.size }.max
   end
 
   def render_lines(formated_files, row_number)
@@ -79,7 +79,7 @@ class Display
       group: file.group_name.ljust(max_widths[:group]),
       size: file.size.to_s.rjust(max_widths[:size]),
       mtime: file.mtime.strftime('%_m %e %R'),
-      base_name: file.base_name
+      path: file.path
     }
   end
 
@@ -92,7 +92,7 @@ class Display
       "  #{data[:group]}",
       "  #{data[:size]}",
       " #{data[:mtime]}",
-      " #{data[:base_name]}"
+      " #{data[:path]}"
     ].join
   end
 end

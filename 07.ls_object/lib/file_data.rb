@@ -3,10 +3,10 @@
 require 'etc'
 
 class FileData
-  attr_reader :base_name
+  attr_reader :path
 
   def initialize(path)
-    @base_name = File.basename(path)
+    @path = path
     @file_status = File.lstat(path)
   end
 
