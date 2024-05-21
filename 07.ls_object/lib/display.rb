@@ -33,8 +33,8 @@ class Display
     if long
       render_long_list
     else
-      width = max_path_width + SHORT_LIST_PADDING
-      formated_file_statuses = @file_statuses.map { |file| file.path.ljust(width) }
+      width = max_base_name_width + SHORT_LIST_PADDING
+      formated_file_statuses = @file_statuses.map { |file| file.base_name.ljust(width) }
       file_count = @file_statuses.count
       row_count = (file_count / COLUMN_COUNT.to_f).ceil
       (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_file_statuses << '' } if file_count % COLUMN_COUNT != 0
@@ -51,8 +51,8 @@ class Display
 
   private
 
-  def max_path_width
-    @file_statuses.map { |file| file.path.size }.max
+  def max_base_name_width
+    @file_statuses.map { |file| file.base_name.size }.max
   end
 
   def render_lines(formated_file_statuses, row_number)
@@ -79,7 +79,7 @@ class Display
       group: status.group_name.ljust(max_widths[:group]),
       size: status.size.to_s.rjust(max_widths[:size]),
       mtime: status.mtime.strftime('%_m %e %R'),
-      path: status.path
+      base_name: status.base_name
     }
   end
 
@@ -92,7 +92,7 @@ class Display
       "  #{data[:group]}",
       "  #{data[:size]}",
       " #{data[:mtime]}",
-      " #{data[:path]}"
+      " #{data[:base_name]}"
     ].join
   end
 end
