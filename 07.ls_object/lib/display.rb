@@ -36,9 +36,9 @@ class Display
       width = max_base_name_width + SHORT_LIST_PADDING
       formated_file_statuses = @file_statuses.map { |file| file.path.ljust(width) }
       file_count = @file_statuses.count
-      row_number = (file_count / COLUMN_COUNT.to_f).ceil
+      row_count = (file_count / COLUMN_COUNT.to_f).ceil
       (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_file_statuses << '' } if file_count % COLUMN_COUNT != 0
-      render_lines(formated_file_statuses, row_number)
+      render_lines(formated_file_statuses, row_count)
     end
   end
 
