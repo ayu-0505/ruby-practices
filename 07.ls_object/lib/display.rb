@@ -31,9 +31,9 @@ class Display
 
   def render(long: false)
     if long
-      long_list
+      render_long_list
     else
-      width = max_base_name_width + SHORT_LIST_PADDING
+      width = max_path_width + SHORT_LIST_PADDING
       formated_file_statuses = @file_statuses.map { |file| file.path.ljust(width) }
       file_count = @file_statuses.count
       row_count = (file_count / COLUMN_COUNT.to_f).ceil
@@ -42,16 +42,16 @@ class Display
     end
   end
 
-  def long_list
+  def render_long_list
     max_widths = find_max_widths
     total = "total #{@file_statuses.sum(&:blocks)}"
-    render_file_statuses = @file_statuses.map { |file| build_data(file, max_widths) }.map { |file| format_row(file) }
-    [total, render_file_statuses]
+    long_list = @file_statuses.map { |status| organize(status, max_widths) }.map { |organized_status| format_row(organized_status) }
+    [total, long_list]
   end
 
   private
 
-  def max_base_name_width
+  def max_path_width
     @file_statuses.map { |file| file.path.size }.max
   end
 
@@ -70,16 +70,16 @@ class Display
     }
   end
 
-  def build_data(file, max_widths)
+  def organize(status, max_widths)
     {
-      type: FILETYPES[file.type],
-      mode: (-3..-1).map { |num| MODE_TABLE[file.mode[num]] }.join,
-      nlink: file.nlink.to_s.rjust(max_widths[:nlink]),
-      user: file.user_name.ljust(max_widths[:user]),
-      group: file.group_name.ljust(max_widths[:group]),
-      size: file.size.to_s.rjust(max_widths[:size]),
-      mtime: file.mtime.strftime('%_m %e %R'),
-      path: file.path
+      type: FILETYPES[status.type],
+      mode: (-3..-1).map { |num| MODE_TABLE[status.mode[num]] }.join,
+      nlink: status.nlink.to_s.rjust(max_widths[:nlink]),
+      user: status.user_name.ljust(max_widths[:user]),
+      group: status.group_name.ljust(max_widths[:group]),
+      size: status.size.to_s.rjust(max_widths[:size]),
+      mtime: status.mtime.strftime('%_m %e %R'),
+      path: status.path
     }
   end
 
