@@ -38,9 +38,11 @@ class Display
       file_count = @file_statuses.count
       row_count = (file_count / COLUMN_COUNT.to_f).ceil
       (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_file_statuses << '' } if file_count % COLUMN_COUNT != 0
-      render_lines(formated_file_statuses, row_count)
+      render_short_list(formated_file_statuses, row_count)
     end
   end
+
+  private
 
   def render_long_list
     max_widths = find_max_widths
@@ -49,13 +51,11 @@ class Display
     [total, long_list]
   end
 
-  private
-
   def max_base_name_width
     @file_statuses.map { |file| file.base_name.size }.max
   end
 
-  def render_lines(formated_file_statuses, row_number)
+  def render_short_list(formated_file_statuses, row_number)
     render_lines = []
     formated_file_statuses.each_slice(row_number) { |file| render_lines << file }
     render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
