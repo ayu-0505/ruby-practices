@@ -3,11 +3,13 @@
 require 'etc'
 
 class FileStatus
-  attr_reader :path
-
   def initialize(path)
     @path = path
     @status = File.lstat(path)
+  end
+
+  def base_name
+    File.basename(@path)
   end
 
   def type
