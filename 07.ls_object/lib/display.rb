@@ -29,8 +29,8 @@ class Display
 
   def render_short_list
     width = max_base_name_width + SHORT_LIST_PADDING
-    formated_files = base_names.map { |file| file.ljust(width) }
-    file_count = count_files
+    formated_files = @files.map { |file| file.base_name.ljust(width) }
+    file_count = @files.count
     row_number = (file_count / COLUMN_NUMBER.to_f).ceil
     (COLUMN_NUMBER - (file_count % COLUMN_NUMBER)).times { formated_files << '' } if file_count % COLUMN_NUMBER != 0
     render_lines(formated_files, row_number)
@@ -38,7 +38,7 @@ class Display
 
   def render_long_list
     max_widths = find_max_widths
-    total = "total #{total_blocks}"
+    total = "total #{@files.sum(&:blocks)}"
     render_files = @files.map { |file| build_data(file, max_widths) }.map { |file| format_row(file) }
     [total, render_files]
   end
@@ -49,14 +49,6 @@ class Display
     @files.map { |file| file.base_name.size }.max
   end
 
-  def base_names
-    @files.map(&:base_name)
-  end
-
-  def count_files
-    @files.count
-  end
-
   def render_lines(formated_files, row_number)
     render_lines = []
     formated_files.each_slice(row_number) { |file| render_lines << file }
@@ -65,72 +57,24 @@ class Display
 
   def find_max_widths
     {
-      size: max_size_width,
-      nlink: max_nlink_width,
-      user: max_user_width,
-      group: max_group_width
+      size: @files.map { |file| file.size.to_i }.max.to_s.size,
+      nlink: @files.map { |file| file.nlink.to_i }.max.to_s.size,
+      user: @files.map { |file| file.user_name.size }.max,
+      group: @files.map { |file| file.group_name.size }.max
     }
-  end
-
-  def max_size_width
-    @files.map { |file| file.size.to_i }.max.to_s.size
-  end
-
-  def max_nlink_width
-    @files.map { |file| file.nlink.to_i }.max.to_s.size
-  end
-
-  def max_user_width
-    @files.map { |file| file.user_name.size }.max
-  end
-
-  def max_group_width
-    @files.map { |file| file.group_name.size }.max
-  end
-
-  def total_blocks
-    @files.sum(&:blocks)
   end
 
   def build_data(file, max_widths)
     {
-      type: convert_type(file.type),
-      mode: convert_mode(file.mode),
-      nlink: resize_nlink(file.nlink, max_widths),
-      user: resize_user(file.user_name, max_widths),
-      group: resize_group(file.group_name, max_widths),
-      size: resize_byte_size(file.size, max_widths),
-      mtime: convert_modify_time(file.mtime),
+      type: FILETYPES[file.type],
+      mode: (-3..-1).map { |num| MODE_TABLE[file.mode[num]] }.join,
+      nlink: file.nlink.to_s.rjust(max_widths[:nlink]),
+      user: file.user_name.ljust(max_widths[:user]),
+      group: file.group_name.ljust(max_widths[:group]),
+      size: file.size.to_s.rjust(max_widths[:size]),
+      mtime: file.mtime.strftime('%_m %e %R'),
       base_name: file.base_name
     }
-  end
-
-  def convert_type(type)
-    FILETYPES[type]
-  end
-
-  def convert_mode(mode)
-    (-3..-1).map { |num| MODE_TABLE[mode[num]] }.join
-  end
-
-  def resize_nlink(nlink, max_widths)
-    nlink.to_s.rjust(max_widths[:nlink])
-  end
-
-  def resize_user(user, max_widths)
-    user.ljust(max_widths[:user])
-  end
-
-  def resize_group(group, max_widths)
-    group.ljust(max_widths[:group])
-  end
-
-  def resize_byte_size(size, max_widths)
-    size.to_s.rjust(max_widths[:size])
-  end
-
-  def convert_modify_time(time)
-    time.strftime('%_m %e %R')
   end
 
   def format_row(data)
