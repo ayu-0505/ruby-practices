@@ -34,11 +34,11 @@ class Display
       render_long_list
     else
       width = max_base_name_width + SHORT_LIST_PADDING
-      formated_file_statuses = @file_statuses.map { |file| file.base_name.ljust(width) }
+      resized_base_names = @file_statuses.map { |file| file.base_name.ljust(width) }
       file_count = @file_statuses.count
       row_count = (file_count / COLUMN_COUNT.to_f).ceil
-      (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { formated_file_statuses << '' } if file_count % COLUMN_COUNT != 0
-      render_short_list(formated_file_statuses, row_count)
+      (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { resized_base_names << '' } if file_count % COLUMN_COUNT != 0
+      render_short_list(resized_base_names, row_count)
     end
   end
 
@@ -47,7 +47,7 @@ class Display
   def render_long_list
     max_widths = find_max_widths
     total = "total #{@file_statuses.sum(&:blocks)}"
-    long_list = @file_statuses.map { |status| organize(status, max_widths) }.map { |organized_status| format_row(organized_status) }
+    long_list = @file_statuses.map { |status| format_file_status(status, max_widths) }
     [total, long_list]
   end
 
@@ -55,9 +55,9 @@ class Display
     @file_statuses.map { |file| file.base_name.size }.max
   end
 
-  def render_short_list(formated_file_statuses, row_number)
+  def render_short_list(resized_base_names, row_number)
     render_lines = []
-    formated_file_statuses.each_slice(row_number) { |file| render_lines << file }
+    resized_base_names.each_slice(row_number) { |file| render_lines << file }
     render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
   end
 
@@ -70,29 +70,16 @@ class Display
     }
   end
 
-  def organize(status, max_widths)
-    {
-      type: FILETYPES[status.type],
-      mode: (-3..-1).map { |num| MODE_TABLE[status.mode[num]] }.join,
-      nlink: status.nlink.to_s.rjust(max_widths[:nlink]),
-      user: status.user_name.ljust(max_widths[:user]),
-      group: status.group_name.ljust(max_widths[:group]),
-      size: status.size.to_s.rjust(max_widths[:size]),
-      mtime: status.mtime.strftime('%_m %e %R'),
-      base_name: status.base_name
-    }
-  end
-
-  def format_row(data)
+  def format_file_status(status, max_widths)
     [
-      data[:type],
-      data[:mode],
-      "  #{data[:nlink]}",
-      " #{data[:user]}",
-      "  #{data[:group]}",
-      "  #{data[:size]}",
-      " #{data[:mtime]}",
-      " #{data[:base_name]}"
+      FILETYPES[status.type],
+      (-3..-1).map { |num| MODE_TABLE[status.mode[num]] }.join,
+      "  #{status.nlink.to_s.rjust(max_widths[:nlink])}",
+      " #{status.user_name.ljust(max_widths[:user])}",
+      "  #{status.group_name.ljust(max_widths[:group])}",
+      "  #{status.size.to_s.rjust(max_widths[:size])}",
+      " #{status.mtime.strftime('%_m %e %R')}",
+      " #{status.base_name}"
     ].join
   end
 end
