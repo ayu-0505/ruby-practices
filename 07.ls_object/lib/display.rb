@@ -33,12 +33,7 @@ class Display
     if long
       render_long_list
     else
-      width = max_base_name_width + SHORT_LIST_PADDING
-      resized_base_names = @file_statuses.map { |file| file.base_name.ljust(width) }
-      file_count = @file_statuses.count
-      row_count = (file_count / COLUMN_COUNT.to_f).ceil
-      (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { resized_base_names << '' } if file_count % COLUMN_COUNT != 0
-      render_short_list(resized_base_names, row_count)
+      render_short_list
     end
   end
 
@@ -49,16 +44,6 @@ class Display
     total = "total #{@file_statuses.sum(&:blocks)}"
     long_list = @file_statuses.map { |status| format_file_status(status, max_widths) }
     [total, long_list]
-  end
-
-  def max_base_name_width
-    @file_statuses.map { |file| file.base_name.size }.max
-  end
-
-  def render_short_list(resized_base_names, row_number)
-    render_lines = []
-    resized_base_names.each_slice(row_number) { |file| render_lines << file }
-    render_lines.transpose.map { |line| line.join.rstrip }
   end
 
   def find_max_widths
@@ -81,5 +66,20 @@ class Display
       " #{status.mtime.strftime('%_m %e %R')}",
       " #{status.base_name}"
     ].join
+  end
+
+  def render_short_list
+    width = max_base_name_width + SHORT_LIST_PADDING
+    resized_base_names = @file_statuses.map { |file| file.base_name.ljust(width) }
+    file_count = @file_statuses.count
+    row_count = (file_count / COLUMN_COUNT.to_f).ceil
+    (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { resized_base_names << '' } if file_count % COLUMN_COUNT != 0
+    short_list_lines = []
+    resized_base_names.each_slice(row_count) { |file| short_list_lines << file }
+    short_list_lines.transpose.map { |line| line.join.rstrip }
+  end
+
+  def max_base_name_width
+    @file_statuses.map { |file| file.base_name.size }.max
   end
 end
