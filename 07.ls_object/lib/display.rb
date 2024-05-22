@@ -58,7 +58,7 @@ class Display
   def render_short_list(resized_base_names, row_number)
     render_lines = []
     resized_base_names.each_slice(row_number) { |file| render_lines << file }
-    render_lines.transpose.map { |line| line.join.rstrip }.join("\n")
+    render_lines.transpose.map { |line| line.join.rstrip }
   end
 
   def find_max_widths

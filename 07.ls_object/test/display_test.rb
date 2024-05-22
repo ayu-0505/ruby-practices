@@ -10,14 +10,12 @@ class DisplayTest < Minitest::Test
   def test_render
     paths = Dir.glob(TARGET_PATHNAME)
     display = Display.new(paths)
-    expected = <<~TEXT.chomp
-      Gemfile            config             storage
-      Gemfile.lock       config.ru          test
-      README.md          db                 tmp
-      Rakefile           lib                vendor
-      app                log
-      bin                public
-    TEXT
+    expected = ['Gemfile            config             storage',
+                'Gemfile.lock       config.ru          test',
+                'README.md          db                 tmp',
+                'Rakefile           lib                vendor',
+                'app                log',
+                'bin                public']
 
     assert_equal expected, display.render
   end
@@ -25,14 +23,12 @@ class DisplayTest < Minitest::Test
   def test_render_at_reverse
     paths = Dir.glob(TARGET_PATHNAME).reverse
     display = Display.new(paths)
-    expected = <<~TEXT.chomp
-      vendor             lib                Rakefile
-      tmp                db                 README.md
-      test               config.ru          Gemfile.lock
-      storage            config             Gemfile
-      public             bin
-      log                app
-    TEXT
+    expected = ['vendor             lib                Rakefile',
+                'tmp                db                 README.md',
+                'test               config.ru          Gemfile.lock',
+                'storage            config             Gemfile',
+                'public             bin',
+                'log                app']
 
     assert_equal expected, display.render
   end
@@ -40,15 +36,13 @@ class DisplayTest < Minitest::Test
   def test_render_with_dotfiles
     paths = Dir.glob(TARGET_PATHNAME, File::FNM_DOTMATCH)
     display = Display.new(paths)
-    expected = <<~TEXT.chomp
-      .                   app                 public
-      .ruby-lsp           bin                 storage
-      .ruby-version       config              test
-      Gemfile             config.ru           tmp
-      Gemfile.lock        db                  vendor
-      README.md           lib
-      Rakefile            log
-    TEXT
+    expected = ['.                   app                 public',
+                '.ruby-lsp           bin                 storage',
+                '.ruby-version       config              test',
+                'Gemfile             config.ru           tmp',
+                'Gemfile.lock        db                  vendor',
+                'README.md           lib',
+                'Rakefile            log']
 
     assert_equal expected, display.render
   end
