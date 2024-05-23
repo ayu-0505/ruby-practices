@@ -72,9 +72,7 @@ class Display
     file_count = @file_statuses.count
     row_count = (file_count / COLUMN_COUNT.to_f).ceil
     (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { resized_base_names << '' } if file_count % COLUMN_COUNT != 0
-    short_list_lines = []
-    resized_base_names.each_slice(row_count) { |file| short_list_lines << file }
-    short_list_lines.transpose.map { |line| line.join.rstrip }.join("\n")
+    resized_base_names.each_slice(row_count).to_a.transpose.map { |line| line.join.rstrip }.join("\n")
   end
 
   def max_base_name_width
