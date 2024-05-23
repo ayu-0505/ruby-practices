@@ -30,11 +30,7 @@ class Display
   end
 
   def render(long: false)
-    if long
-      render_long_list
-    else
-      render_short_list
-    end
+    long ? render_long_list : render_short_list
   end
 
   private
