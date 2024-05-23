@@ -52,9 +52,10 @@ class Display
   end
 
   def format_file_status(status, max_widths)
+    mode_types = (-3..-1).map { |num| MODE_TABLE[status.mode[num]] }.join
     [
       FILETYPES[status.type],
-      (-3..-1).map { |num| MODE_TABLE[status.mode[num]] }.join,
+      mode_types,
       "  #{status.nlink.to_s.rjust(max_widths[:nlink])}",
       " #{status.user_name.ljust(max_widths[:user])}",
       "  #{status.group_name.ljust(max_widths[:group])}",
