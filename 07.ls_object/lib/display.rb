@@ -4,7 +4,9 @@ require_relative 'file_status'
 
 class Display
   COLUMN_COUNT = 3
+
   SHORT_LIST_PADDING = 7
+
   FILETYPES = {
     'fifo' => 'p',
     'characterSpecial' => 'c',
@@ -14,6 +16,7 @@ class Display
     'link' => 'l',
     'socket' => 's'
   }.freeze
+
   MODE_TABLE = {
     '0' => '---',
     '1' => '--x',
@@ -38,9 +41,8 @@ class Display
   def render_long_list
     max_widths = find_max_widths
     total = "total #{@file_statuses.sum(&:blocks)}"
-    long_list = @file_statuses.map { |status| format_file_status(status, max_widths) }.join("\n")
-    # [total, long_list]
-    "#{total}\n#{long_list}"
+    details = @file_statuses.map { |status| format_file_status(status, max_widths) }
+    [total, *details].join("\n")
   end
 
   def find_max_widths
@@ -72,7 +74,11 @@ class Display
     file_count = @file_statuses.count
     row_count = (file_count / COLUMN_COUNT.to_f).ceil
     (COLUMN_COUNT - (file_count % COLUMN_COUNT)).times { resized_base_names << '' } if file_count % COLUMN_COUNT != 0
-    resized_base_names.each_slice(row_count).to_a.transpose.map { |line| line.join.rstrip }.join("\n")
+    resized_base_names
+      .each_slice(row_count)
+      .to_a
+      .transpose
+      .map { |line| line.join.rstrip }.join("\n")
   end
 
   def max_base_name_width
